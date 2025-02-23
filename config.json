@@ -1,0 +1,25 @@
+{
+    "servers": [
+        {
+            "name": "weather",
+            "command": "python",
+            "args": ["mcpservers/weather.py"]
+
+        },
+        {
+            "name": "dailysum",
+            "command": "python",
+            "args": ["mcpservers/dailysum.py"]
+        },
+        {
+            "name": "ai_thinking",
+            "command": "python",
+            "args": ["mcpservers/ai_thinking.py"]
+        },
+        {
+            "name": "Arkiv paper search",
+            "command": "python",
+            "args": ["/Users/sparkt/2024_CODE/AwesomeMCPChat/mcpservers/arxiv-mcp-server/src/arxiv_mcp_server/server.py"]
+        }
+    ]
+}
