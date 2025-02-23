@@ -13,7 +13,7 @@ from bs4 import BeautifulSoup
 mcp = FastMCP("dailysummary")
 
 from pathlib import Path
-OBSIDIAN_VAULT_PATH = Path(os.getenv("OBSIDIAN_VAULT_PATH", "https://api.openai.com/v1"))
+OBSIDIAN_VAULT_PATH = Path(os.getenv("OBSIDIAN_VAULT_PATH", "/Users/sparkt/Documents/ObsidianVault2024/daily/"))
 
 
 def debug_log(message: str, filename="debug.log") -> None:
