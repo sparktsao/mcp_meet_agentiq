@@ -1,0 +1,25 @@
+[tool.poetry]
+name = "awesomemcpchat"
+version = "0.1.0"
+description = ""
+authors = ["sparktsao <linhots.tsao@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+chainlit = "^2.2.1"
+requests = "^2.32.3"
+bs4 = "^0.0.2"
+mcp = "^1.3.0"
+langgraph = "^0.2.74"
+colorama = "^0.4.6"
+markdown = "^3.7"
+markdown2 = "^2.5.3"
+arxiv = "^2.1.3"
+python-dateutil = "^2.9.0.post0"
+pymupdf4llm = "^0.0.17"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
