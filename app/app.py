@@ -41,7 +41,8 @@ class SingleLLMClient:
     def invoke(self, messages: List[Dict[str, str]]) -> str:
         print()
         print("invoke:", self.model)
-        print(messages)
+        print(f"\033[33m {messages} \033[0m")
+        
         headers = {
             "Content-Type": "application/json",
             "Authorization": f"Bearer {self.api_key}",
@@ -56,7 +57,7 @@ class SingleLLMClient:
         r.raise_for_status()
         data = r.json()
         print()
-        print(data)
+        print(f"\033[35m {data} \033[0m")
         return data["choices"][0]["message"]["content"]
 
 ###############################################################################
@@ -102,7 +103,7 @@ class MCPToolManager:
         tool_list_resp = await session.list_tools()
         
         print("TOOLS")
-        print(tool_list_resp)
+        print(f"\033[91m {tool_list_resp}\033[0m")
         self.tools[name] = tool_list_resp
 
     async def async_call_tool(self, tool_server: str, tool_name: str, kwargs) -> Any:
@@ -469,10 +470,7 @@ async def on_chat_start():
         session_id = os.urandom(8).hex()  # Generate a unique session ID
         cl.user_session.set("session_id", session_id)
 
-
-
     print(f"[DEBUG] on_chat_start triggered - Session ID: {session_id}")
-
 
     # Check if MCP Tool Manager is already initialized
     if cl.user_session.get("tool_manager") is None:
