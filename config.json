@@ -17,7 +17,7 @@
             "args": ["mcpservers/ai_thinking.py"]
         },
         {
-            "name": "arkiv",
+            "name": "arxiv",
             "command": "python",
             "args": ["./mcpservers/arxiv-mcp-server/src/arxiv_mcp_server/server.py"]
         },

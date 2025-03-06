@@ -31,9 +31,9 @@ The system is powered by multiple MCP-based servers, each responsible for differ
             "args": ["mcpservers/ai_thinking.py"]
         },
         {
-            "name": "Arkiv paper search",
+            "name": "arxiv paper search",
             "command": "python",
-            "args": ["/Users/sparkt/2024_CODE/AwesomeMCPChat/mcpservers/arxiv-mcp-server/src/arxiv_mcp_server/server.py"]
+            "args": ["./mcpservers/arxiv-mcp-server/src/arxiv_mcp_server/server.py"]
         }
     ]
 }
