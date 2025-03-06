@@ -18,6 +18,10 @@ markdown2 = "^2.5.3"
 arxiv = "^2.1.3"
 python-dateutil = "^2.9.0.post0"
 pymupdf4llm = "^0.0.17"
+langfuse = "^2.59.7"
+langchain = "^0.3.20"
+langchain-openai = "^0.3.7"
+langchain-community = "^0.3.19"
 
 
 [build-system]

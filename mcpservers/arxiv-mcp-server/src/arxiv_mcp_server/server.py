@@ -22,11 +22,36 @@ logger.setLevel(logging.INFO)
 
 from mcp.server.fastmcp import FastMCP
 # Initialize FastMCP server
-mcp = FastMCP("arkiv")
+mcp = FastMCP("arxiv")
 
 @mcp.tool()
 async def call_tool(name: str, arguments: Dict[str, Any]) -> List[types.TextContent]:
-    """Handle tool calls for arXiv research functionality."""
+    """
+    Handles various research-related functionalities for querying and retrieving academic papers from arXiv.
+
+    Parameters:
+    - name (str): The name of the tool function to be executed. Supported values:
+    - "search_papers": Searches for papers on arXiv based on provided criteria.
+    - "download_paper": Downloads a specific paper given its identifier.
+    - "list_papers": Retrieves a list of available papers based on user preferences.
+    - "read_paper": Reads and returns the content of a specified paper.
+
+    - arguments (Dict[str, Any]): A dictionary containing parameters required for the selected tool function. 
+    Expected keys depend on the chosen tool:
+    - For "search_papers": May include 'query' (search term), 'max_results' (number of results), and 'sort_by' (sorting criteria like relevance or date).
+    - For "download_paper": Requires 'paper_id' (arXiv identifier).
+    - For "list_papers": Could include filters like 'category' or 'author'.
+    - For "read_paper": Requires 'paper_id' to fetch the content.
+
+    Returns:
+    - List[types.TextContent]: A list containing either:
+    - The requested information (e.g., search results, paper metadata, or content).
+    - An error message if the tool name is invalid or an exception occurs.
+
+    Example Usage:
+        await call_tool("search_papers", {"query": "deep learning", "max_results": 5})
+    """
+
     logger.debug(f"Calling tool {name} with arguments {arguments}")
     try:
         if name == "search_papers":

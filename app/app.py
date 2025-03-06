@@ -8,6 +8,16 @@ from dataclasses import dataclass, asdict
 from dotenv import load_dotenv
 load_dotenv()
 
+from langfuse import Langfuse
+
+langfuse = Langfuse(
+  secret_key=os.getenv("langfuse_secret", "your langfuse secret key"),
+  public_key=os.getenv("langfuse_public", "your langfuse public key"),
+  host=os.getenv("LANGFUSE_HOST", "http://localhost:3000")
+)
+
+from langfuse.callback import CallbackHandler
+
 import sys
 
 import requests
@@ -492,6 +502,8 @@ async def on_chat_start():
 
     await cl.Message(content="Hello! Ask me anything.").send()
 
+langfuse_handler = CallbackHandler()
+
 @cl.on_message
 async def on_message(msg: cl.Message):
     user_txt = msg.content.strip()
@@ -506,7 +518,8 @@ async def on_message(msg: cl.Message):
     config = {
         "configurable": {
             "my_state": my_state
-        }
+        },
+        "callbacks": [langfuse_handler]
     }
 
     final_answer = None
