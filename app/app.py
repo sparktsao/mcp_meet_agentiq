@@ -11,8 +11,8 @@ load_dotenv()
 from langfuse import Langfuse
 
 langfuse = Langfuse(
-  secret_key=os.getenv("langfuse_secret", "your langfuse secret key"),
-  public_key=os.getenv("langfuse_public", "your langfuse public key"),
+  secret_key=os.getenv("LANGFUSE_SECRET_KEY", "your langfuse secret key"),
+  public_key=os.getenv("LANGFUSE_PUBLIC_KEY", "your langfuse public key"),
   host=os.getenv("LANGFUSE_HOST", "http://localhost:3000")
 )
 
@@ -34,6 +34,9 @@ grpc_logger.setLevel(logging.DEBUG)
 # LangGraph
 from langgraph.graph import StateGraph, START, END
 from langgraph.types import Command
+
+from dotenv import load_dotenv
+load_dotenv()
 
 LLM_API_ENDPOINT = os.getenv("OPENAI_API_BASE", "https://api.openai.com/v1")
 LLM_API_KEY = os.getenv("OPENAI_API_KEY", "YOUR_OPENAI_KEY_HERE")
