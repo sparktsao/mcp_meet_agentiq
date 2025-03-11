@@ -22,6 +22,8 @@ langfuse = "^2.59.7"
 langchain = "^0.3.20"
 langchain-openai = "^0.3.7"
 langchain-community = "^0.3.19"
+streamlit = "^1.43.1"
+nest-asyncio = "^1.6.0"
 
 
 [build-system]
