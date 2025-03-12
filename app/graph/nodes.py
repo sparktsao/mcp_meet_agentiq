@@ -49,7 +49,7 @@ async def initial_invoke(state: GraphState, config: dict):
         ]
 
     logger.debug("---")
-    logger.debug("# of chat_history:", len(my_state.chat_history))
+    logger.debug("# of chat_history: %s", len(my_state.chat_history))
     logger.debug("Call LLM Messages:")
     logger.debug("%s", pretty_print(call_message))
     logger.debug("---")
@@ -100,6 +100,7 @@ async def tool_call_and_second_invoke(state: GraphState, config: dict):
     logger.debug("---")
     logger.debug("Tool response:")
     logger.debug("%s", print_tool_response(tool_res))
+    logger.debug("---")
 
     # Convert tool_res to a string before using it
     if hasattr(tool_res, "content"):
