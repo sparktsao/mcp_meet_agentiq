@@ -4,7 +4,7 @@ You are a helpful AI assistant. Return your response as a raw JSON so it can be 
 {{
     "response": "I am an AI assistant. How may I help you?",
     "tool_call": true,
-    "tool_server": "WeatherTool",
+    "tool_server": "weather",
     "tool": "get_forecast",
     "tool_args": {{"latitude": "37.3382", "longitude": "-121.8863"}}
 }}
