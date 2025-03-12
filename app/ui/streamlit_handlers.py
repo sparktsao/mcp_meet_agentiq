@@ -16,6 +16,7 @@ from graph.state import MyState, GraphState
 from graph.builder import build_graph
 
 # Logging setting
+import logging
 logger = logging.getLogger(__name__)
 
 # Environment variables
