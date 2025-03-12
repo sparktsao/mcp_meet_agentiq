@@ -3,6 +3,10 @@ LLM client for making API calls to language models.
 """
 import requests
 from typing import List, Dict, Any
+import logging
+
+# Logging setting
+logger = logging.getLogger(__name__)
 
 class SingleLLMClient:
     """
@@ -31,9 +35,9 @@ class SingleLLMClient:
         Returns:
             str: The LLM response.
         """
-        print()
-        print("invoke:", self.model)
-        print(f"\033[33m {messages} \033[0m")
+        logger.debug("---")
+        logger.debug("Invoking LLM model [%s] with message:", self.model)
+        logger.debug(f"\033[33m {messages} \033[0m")
         
         headers = {
             "Content-Type": "application/json",
@@ -48,6 +52,7 @@ class SingleLLMClient:
         r = requests.post(f"{self.endpoint}/chat/completions", json=payload, headers=headers)
         r.raise_for_status()
         data = r.json()
-        print()
-        print(f"\033[35m {data} \033[0m")
+        logger.debug("---")
+        logger.debug("LLM response:")
+        logger.debug(f"\033[35m {data} \033[0m")
         return data["choices"][0]["message"]["content"]

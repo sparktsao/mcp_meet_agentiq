@@ -4,16 +4,25 @@ Main application entry point.
 This file serves as the main entry point for the application, importing and using
 the modular components defined in the other files.
 """
+import logging.handlers
+import logging
+
+# Configure logging
+logging.basicConfig(
+    level=logging.DEBUG,
+    format="%(asctime)s - %(levelname)s - %(name)s - %(message)s",
+    handlers=[logging.StreamHandler()],
+    force=True
+)
+grpc_logger = logging.getLogger("grpc")
+grpc_logger.setLevel(logging.DEBUG)
+
 import os
 import sys
-import logging
 import importlib.util
 import pathlib
 
-# Configure logging
-logging.basicConfig(level=logging.DEBUG)
-grpc_logger = logging.getLogger("grpc")
-grpc_logger.setLevel(logging.DEBUG)
+
 
 # Import environment variables
 from dotenv import load_dotenv
@@ -32,6 +41,6 @@ from ui.chainlit_handlers import on_chat_start, on_message
 # automatically discover and use the handlers defined in chainlit_handlers.py
 
 if __name__ == "__main__":
-    print("This file is meant to be imported by Chainlit, not run directly.")
-    print("Run the application using: chainlit run app/app.py")
+    logging.warning("This file is meant to be imported by Chainlit, not run directly.")
+    logging.warning("Run the application using: chainlit run app/app.py")
     sys.exit(1)

@@ -10,7 +10,8 @@ from mcp import ClientSession, StdioServerParameters
 from mcp.client.stdio import stdio_client
 
 import logging
-logging.basicConfig(level=logging.DEBUG)
+# Logging setting
+logger = logging.getLogger(__name__)
 grpc_logger = logging.getLogger("grpc")
 grpc_logger.setLevel(logging.DEBUG)
 
@@ -26,10 +27,9 @@ class MCPToolManager:
 
     async def initialize(self):
         """Initializes all configured servers and stores their sessions."""
-        print("INIT MCP TOOL MANAGER")
+        logger.debug("MCP tools configs:")
         for cfg in self.server_configs:
-            print("for each MCP server!")
-            print(cfg)
+            logger.debug(cfg)
             await self.connect_one_server(cfg)
     
     def get_venv_python(self):
@@ -51,13 +51,13 @@ class MCPToolManager:
 
         if command == "python":
             venv_python = self.get_venv_python()
+            logger.debug("Current virtual environment's Python interpreter: %s", venv_python)
 
             if not venv_python:
-                print("Error: Could not find the virtual environment's Python interpreter.")
+                logger.error("Error: Could not find the virtual environment's Python interpreter.")
                 os.sys.exit(1)
 
             command = venv_python
-            print(command)
 
         server_params = StdioServerParameters(
             command=command,
@@ -77,8 +77,8 @@ class MCPToolManager:
         # List available tools
         tool_list_resp = await session.list_tools()
         
-        print("TOOLS")
-        print(f"\033[91m {tool_list_resp}\033[0m")
+        logger.debug("List of MCP Tools:")
+        logger.debug(f"\033[91m {tool_list_resp}\033[0m")
         self.tools[name] = tool_list_resp
 
     async def async_call_tool(self, tool_server: str, tool_name: str, kwargs) -> Any:
@@ -87,39 +87,39 @@ class MCPToolManager:
         #     raise ValueError(f"Tool '{tool_name}' not found in tool server '{tool_server}'!")
 
         result = await self.sessions[tool_server].call_tool(tool_name, kwargs)
-        print("ASYNC RESULT")
-        print(result)
+        logger.debug("Tool result call for Tool server [%s] with Tool [%s]", tool_server, tool_name)
+        logger.debug(result)
         return result
 
     async def call_tool(self, tool_server: str, tool_name: str, kwargs) -> Any:
         """Calls a tool and ensures the result is returned properly."""
-        print(f"MCP call_tool-1: {tool_server}::{tool_name} with args: {kwargs}")
+        logger.debug(f"MCP call_tool-1: {tool_server}::{tool_name} with args: {kwargs}")
 
         if tool_server not in self.sessions:
             raise ValueError(f"Tool server '{tool_server}' not found!")
 
         try:
             result = await self.sessions[tool_server].call_tool(tool_name, kwargs)
-            print(f"MCP call Tool-2: '{tool_name}' execution complete. Result: {result}")
+            logger.debug(f"MCP call Tool-2: '{tool_name}' execution complete. Result: {result}")
             return result
         except Exception as e:
-            print(f"Error calling tool '{tool_name}': {e}")
+            logger.error(f"Error calling tool '{tool_name}': {e}")
             return {"error": str(e)}
 
     async def cleanup(self):
         """Closes all sessions and exit stacks on shutdown."""
-        print("Cleaning up MCP sessions...")
+        logger.info("Cleaning up MCP sessions...")
         
         # Close all exit stacks which will properly clean up all resources
         for name, exit_stack in list(self.exit_stacks.items()):
             try:
                 await exit_stack.aclose()
-                print(f"Successfully closed exit stack for {name}")
+                logger.info(f"Successfully closed exit stack for {name}")
             except Exception as e:
-                print(f"Error closing exit stack for {name}: {e}")
+                logger.error(f"Error closing exit stack for {name}: {e}")
         
         # Clear all dictionaries
         self.exit_stacks.clear()
         self.sessions.clear()
         self.tools.clear()
-        print("MCP cleanup complete")
+        logger.info("MCP cleanup complete")

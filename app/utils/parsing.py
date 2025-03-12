@@ -3,6 +3,10 @@ Parsing utilities for AI responses.
 """
 import json
 from typing import Tuple, Dict, Any, Optional
+import logging
+
+# Logging setting
+logger = logging.getLogger(__name__)
 
 def parse_ai_response(content: str) -> Tuple[Optional[bool], Optional[str], Optional[str], Optional[Dict[str, Any]], Optional[str]]:
     """
@@ -37,6 +41,6 @@ def parse_ai_response(content: str) -> Tuple[Optional[bool], Optional[str], Opti
 
     except json.JSONDecodeError:
         # If the AI returned invalid JSON, treat it as a direct response
-        print("Loading AI JSON response failed!!!")
-        print(content)
+        logger.error("Loading AI JSON response failed!!!")
+        logger.error(content)
         return None, None, None, None, content.strip()

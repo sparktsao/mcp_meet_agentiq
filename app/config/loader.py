@@ -16,6 +16,6 @@ def load_server_config():
     with open(CONFIG_FILE_PATH, "r", encoding="utf-8") as f:
         config_data = json.load(f)
 
-    print(config_data)
+    # print(config_data)
     
     return config_data.get("servers", [])

@@ -4,6 +4,10 @@ Formatting utilities for pretty printing messages and responses.
 import textwrap
 from colorama import Fore, Style
 from typing import List, Dict, Any
+import logging
+
+# Logging setting
+logger = logging.getLogger(__name__)
 
 def pretty_print_long_string(long_string, width=180):
     """
