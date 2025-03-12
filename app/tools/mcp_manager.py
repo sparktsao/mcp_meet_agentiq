@@ -31,12 +31,33 @@ class MCPToolManager:
             print("for each MCP server!")
             print(cfg)
             await self.connect_one_server(cfg)
+    
+    def get_venv_python(self):
+        """Returns the correct Python executable path inside the virtual environment."""
+        venv_path = os.sys.prefix  # sys.prefix points to the virtual environment root
+
+        if os.name == "nt":  # Windows
+            python_path = os.path.join(venv_path, "Scripts", "python.exe")
+        else:  # macOS/Linux
+            python_path = os.path.join(venv_path, "bin", "python")
+
+        return python_path if os.path.exists(python_path) else None
 
     async def connect_one_server(self, cfg: Dict[str, Any]):
         """Establishes a connection to a tool server and initializes tool mappings."""
         name = cfg["name"] # Tool Name (eg. WeatherTool)
         command = cfg["command"]
         args = cfg["args"]
+
+        if command == "python":
+            venv_python = self.get_venv_python()
+
+            if not venv_python:
+                print("Error: Could not find the virtual environment's Python interpreter.")
+                os.sys.exit(1)
+
+            command = venv_python
+            print(command)
 
         server_params = StdioServerParameters(
             command=command,

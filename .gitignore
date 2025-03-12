@@ -1,0 +1,62 @@
+# .env file
+.env
+
+# Chainlit files
+.chainlit/
+.files/
+chainlit.md
+
+
+# Byte-compiled / compiled Python files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+env/
+
+# Distribution / packaging
+build/
+dist/
+*.egg-info/
+pip-wheel-metadata/
+
+# Logs and database files
+*.log
+*.sqlite3
+*.db
+*.db-journal
+
+# Python testing and coverage reports
+.coverage
+.tox/
+.nox/
+pytest_cache/
+htmlcov/
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# MyPy type checker cache
+.mypy_cache/
+
+# Cython and compiled Python extensions
+*.so
+*.pyd
+*.dll
+
+# IDE and editor settings
+.vscode/
+.idea/
+*.swp
+*.swo
+*.bak
+*.tmp
+
+# macOS system files
+.DS_Store
+
+# Windows system files
+Thumbs.db
+Desktop.ini
