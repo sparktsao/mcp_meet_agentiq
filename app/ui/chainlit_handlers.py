@@ -4,6 +4,7 @@ Chainlit UI handlers.
 import os
 import asyncio
 import chainlit as cl
+import logging
 from typing import Dict, Any
 
 from langfuse import Langfuse
@@ -18,6 +19,9 @@ from graph.builder import build_graph
 # Environment variables
 from dotenv import load_dotenv
 load_dotenv()
+
+# Logging setting
+logger = logging.getLogger(__name__)
 
 # Langfuse setup
 langfuse = Langfuse(
@@ -43,7 +47,7 @@ async def on_chat_start():
     Handler for chat start event.
     """
     if cl.user_session.get("initialized"):
-        print("[DEBUG] on_chat_start skipped because session is already initialized.")
+        logger.debug("on_chat_start skipped because session is already initialized.")
         return
     
     cl.user_session.set("initialized", True)  # Mark session as initialized
@@ -53,7 +57,8 @@ async def on_chat_start():
         session_id = os.urandom(8).hex()  # Generate a unique session ID
         cl.user_session.set("session_id", session_id)
 
-    print(f"[DEBUG] on_chat_start triggered - Session ID: {session_id}")
+    logger.debug(f"on_chat_start triggered - Session ID: {session_id}")
+
 
     # Check if MCP Tool Manager is already initialized
     if cl.user_session.get("tool_manager") is None:
@@ -72,10 +77,10 @@ async def on_chat_start():
         graph = build_graph()
         cl.user_session.set("graph", graph)
 
-        print("MCPToolManager initialized.")
+        logger.info("MCPToolManager initialized.")
 
     else:
-        print("MCPToolManager already initialized, skipping.")
+        logger.info("MCPToolManager already initialized, skipping.")
 
     await cl.Message(content="Hello! Ask me anything.").send()
 
@@ -88,7 +93,7 @@ async def on_message(msg: cl.Message):
         msg (cl.Message): The incoming message.
     """
     user_txt = msg.content.strip()
-    print(f"Received message: {user_txt}")  # Debug print
+    logger.debug(f"Received message: {user_txt}")  # Debug print
 
     # Create state for this message
     my_state = MyState(user_input=user_txt)
@@ -112,11 +117,11 @@ async def on_message(msg: cl.Message):
     final_answer = None
     try:
         async for output in graph.astream(initial_state, stream_mode="messages", config=config):
-            print(f"Stream output: {output}")  # Debug print
+            logger.debug(f"Stream output: {output}")  # Debug print
             if isinstance(output, dict) and "final_answer" in output:
                 final_answer = output["final_answer"]
     except Exception as e:
-        print(f"Error in stream: {e}")  # Debug print
+        logger.debug(f"Error in stream: {e}")  # Debug print
         final_answer = f"Error occurred: {str(e)}"
 
     # If we didn't get a final answer from the graph, check my_state
@@ -127,5 +132,5 @@ async def on_message(msg: cl.Message):
     if not final_answer:
         final_answer = "I apologize, but I wasn't able to generate a response. Please try again."
 
-    print(f"Sending answer: {final_answer}")  # Debug print
+    logger.debug(f"Sending answer: {final_answer}")  # Debug print
     await cl.Message(content=final_answer).send()

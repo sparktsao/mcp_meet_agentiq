@@ -81,6 +81,13 @@ Ensure you have the following installed:
 ```bash
 git clone https://github.com/yourusername/AwesomeMCPChat.git
 cd AwesomeMCPChat
+python -m venv venv
+
+# Windows
+./venv/Scripts/activate
+# Linux/Mac
+source venv/bin/activate
+
 pip install -r requirements.txt
 ```
 

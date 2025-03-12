@@ -15,6 +15,9 @@ from tools.mcp_manager import MCPToolManager
 from graph.state import MyState, GraphState
 from graph.builder import build_graph
 
+# Logging setting
+logger = logging.getLogger(__name__)
+
 # Environment variables
 from dotenv import load_dotenv
 load_dotenv()
@@ -43,10 +46,10 @@ async def cleanup_previous_session():
     """
     if "tool_manager" in st.session_state and st.session_state.tool_manager:
         try:
-            print("Cleaning up previous MCP sessions...")
+            logger.info("Cleaning up previous MCP sessions...")
             await st.session_state.tool_manager.cleanup()
         except Exception as e:
-            print(f"Error during cleanup: {e}")
+            logger.error(f"Error during cleanup: {e}")
 
 async def initialize_session():
     """
@@ -69,13 +72,13 @@ async def initialize_session():
     try:
         await st.session_state.tool_manager.initialize()
     except Exception as e:
-        print(f"Error initializing MCP Tool Manager: {e}")
+        logger.error(f"Error initializing MCP Tool Manager: {e}")
         st.error(f"Failed to initialize MCP tools: {e}")
     
     # Build the graph
     st.session_state.graph = build_graph()
     
-    print(f"Session initialized with ID: {st.session_state.session_id}")
+    logger.info(f"Session initialized with ID: {st.session_state.session_id}")
 
 async def process_message(user_input: str):
     """
@@ -125,7 +128,7 @@ async def process_message(user_input: str):
             if isinstance(output, dict) and "final_answer" in output:
                 final_answer = output["final_answer"]
     except Exception as e:
-        print(f"Error in stream: {e}")
+        logger.error(f"Error in stream: {e}")
         final_answer = f"Error occurred: {str(e)}"
 
     # If we didn't get a final answer from the graph, check my_state
