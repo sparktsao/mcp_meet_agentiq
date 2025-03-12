@@ -4,12 +4,32 @@ Formatting utilities for pretty printing messages and responses.
 import textwrap
 from colorama import Fore, Style
 from typing import List, Dict, Any
+import io
+import sys
 import logging
 
 # Logging setting
 logger = logging.getLogger(__name__)
 
+def capture_print_output(func, *args, **kwargs):
+    """
+    Captures all `print()` output from a function and returns it as a string.
+    """
+    # Redirect stdout to capture printed output
+    captured_output = io.StringIO()
+    sys.stdout = captured_output  # Temporarily redirect stdout
+
+    try:
+        func(*args, **kwargs)  # Call the function
+    finally:
+        sys.stdout = sys.__stdout__  # Restore stdout
+
+    return captured_output.getvalue().strip()  # Get captured output as a string
+
 def pretty_print_long_string(long_string, width=180):
+    return capture_print_output(pretty_print_long_string_raw, long_string, width)
+
+def pretty_print_long_string_raw(long_string, width=180):
     """
     Pretty prints a long string in a readable format with specified width.
 
@@ -25,6 +45,9 @@ def pretty_print_long_string(long_string, width=180):
     print(wrapped_string)
 
 def pretty_print(messages):
+    return capture_print_output(pretty_print_raw, messages)
+
+def pretty_print_raw(messages):
     """
     Pretty prints a list of OpenAI chat messages with colors for better readability.
 
@@ -54,6 +77,9 @@ def pretty_print(messages):
         print(Style.RESET_ALL + "-" * 80)  # Separator for clarity
 
 def print_tool_response(messages):
+    return capture_print_output(print_tool_response_raw, messages)
+
+def print_tool_response_raw(messages):
     """
     Pretty prints tool response messages with colors for better readability.
 
