@@ -28,6 +28,13 @@ class MyState:
         self.tool_result = tool_result
         self.final_answer = final_answer
         self.chat_history = []
+        
+        # Tool usage counter dictionary to track how many times each tool has been used
+        # Format: {tool_server: {tool_name: count}}
+        self.tool_usage_counts: Dict[str, Dict[str, int]] = {}
+        
+        # Maximum allowed uses per tool (can be customized)
+        self.max_tool_uses: int = 1
 
         # These will be set later
         self.llm = None
