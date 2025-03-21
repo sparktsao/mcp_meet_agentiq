@@ -15,7 +15,7 @@ logging.basicConfig(
     force=True
 )
 grpc_logger = logging.getLogger("grpc")
-grpc_logger.setLevel(logging.DEBUG)
+grpc_logger.setLevel(logging.INFO)
 
 import os
 import sys

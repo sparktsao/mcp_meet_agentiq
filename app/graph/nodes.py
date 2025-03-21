@@ -95,18 +95,40 @@ async def tool_call_and_second_invoke(state: GraphState, config: dict):
     my_state: MyState = config["configurable"]["my_state"]
     tm = my_state.tool_manager
     
-    tool_res = await tm.call_tool(state.tool_server, state.tool_name, state.tool_arguments)
+    # Initialize the tool server in the usage counts dictionary if it doesn't exist
+    if state.tool_server not in my_state.tool_usage_counts:
+        my_state.tool_usage_counts[state.tool_server] = {}
     
-    logger.debug("---")
-    logger.debug("Tool response:")
-    logger.debug("%s", print_tool_response(tool_res))
-    logger.debug("---")
-
-    # Convert tool_res to a string before using it
-    if hasattr(tool_res, "content"):
-        tool_res_str = "\n".join(content.text for content in tool_res.content)
+    # Initialize the tool name in the usage counts dictionary if it doesn't exist
+    if state.tool_name not in my_state.tool_usage_counts[state.tool_server]:
+        my_state.tool_usage_counts[state.tool_server][state.tool_name] = 0
+    
+    # Check if the tool has reached its usage limit
+    if my_state.tool_usage_counts[state.tool_server][state.tool_name] >= my_state.max_tool_uses:
+        # Tool limit reached, return a message instead of calling the tool
+        tool_res_str = f"Tool usage limit reached: {state.tool_name} can only be used {my_state.max_tool_uses} times."
+        logger.warning(tool_res_str)
     else:
-        tool_res_str = str(tool_res)  # Fallback if `content` is not present
+        # Increment the tool usage counter
+        my_state.tool_usage_counts[state.tool_server][state.tool_name] += 1
+        
+        # Log the current tool usage
+        logger.info(f"Tool usage: {state.tool_server}.{state.tool_name} - " +
+                    f"{my_state.tool_usage_counts[state.tool_server][state.tool_name]}/{my_state.max_tool_uses}")
+        
+        # Call the tool
+        tool_res = await tm.call_tool(state.tool_server, state.tool_name, state.tool_arguments)
+        
+        logger.info("---")
+        logger.info("Tool response:")
+        logger.info("%s", print_tool_response(tool_res))
+        logger.info("---")
+
+        # Convert tool_res to a string before using it
+        if hasattr(tool_res, "content"):
+            tool_res_str = "\n".join(content.text for content in tool_res.content)
+        else:
+            tool_res_str = str(tool_res)  # Fallback if `content` is not present
     
     my_state.chat_history.append({"role": "assistant", "content": f"Tool result from {state.tool_server} {state.tool_name} using {state.tool_arguments} below:"})
     my_state.chat_history.append({"role": "assistant", "content": tool_res_str})

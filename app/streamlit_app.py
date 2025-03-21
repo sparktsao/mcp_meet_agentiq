@@ -17,9 +17,9 @@ from concurrent.futures import ThreadPoolExecutor
 nest_asyncio.apply()
 
 # Configure logging
-logging.basicConfig(level=logging.DEBUG)
+logging.basicConfig(level=logging.INFO)
 grpc_logger = logging.getLogger("grpc")
-grpc_logger.setLevel(logging.DEBUG)
+grpc_logger.setLevel(logging.INFO)
 
 # Import environment variables
 from dotenv import load_dotenv

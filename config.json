@@ -1,25 +1,9 @@
 {
     "servers": [
         {
-            "name": "weather",
+            "name": "AgentIQ",
             "command": "python",
-            "args": ["mcpservers/weather.py"]
-
-        },
-        {
-            "name": "dailysum",
-            "command": "python",
-            "args": ["mcpservers/dailysum.py"]
-        },
-        {
-            "name": "ai_thinking",
-            "command": "python",
-            "args": ["mcpservers/ai_thinking.py"]
-        },
-        {
-            "name": "news_search",
-            "command": "python",
-            "args": ["mcpservers/googlenews.py"]
+            "args": ["mcpservers/agentiqclient.py"]
         }
     ]
 }
